@@ -159,7 +159,7 @@ export default {
 					const fakeConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, 'CF-Workers-SUB', RproxyIP, url);
 					return new Response(`${fakeConfig}`, { status: 200 });
 				case `/${userID}`: {
-					await sendMessage(`#获取订阅 ${FileName}`, request.headers.get('CF-Connecting-IP'), `UA: ${UA}</tg-spoiler>\n域名: ${url.hostname}\n<tg-spoiler>入口: ${url.pathname + url.search}</tg-spoiler>`);
+					await sendMessage(`#获取订阅 ${FileName}`, request.headers.get('CF-Connecting-IP'), `UA: ${UA}\n域名: ${url.hostname}\n<tg-spoiler>入口: ${url.pathname + url.search}</tg-spoiler>`);
 					const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, UA, RproxyIP, url);
 					const now = Date.now();
 					//const timestamp = Math.floor(now / 1000);
@@ -1810,12 +1810,12 @@ async function sendMessage(type, ip, add_data = "") {
 		const response = await fetch(`http://ip-api.com/json/${ip}?lang=zh-CN`);
 		if (response.status == 200) {
 			const ipInfo = await response.json();
-			msg = `${type}\nIP: ${ip}\n国家: ${ipInfo.country}\n<tg-spoiler>城市: ${ipInfo.city}\n组织: ${ipInfo.org}\nASN: ${ipInfo.as}\n${add_data}`;
+			msg = `${type}\nIP: ${ip}\n国家: ${ipInfo.country}\n<tg-spoiler>城市: ${ipInfo.city}\n组织: ${ipInfo.org}\nASN: ${ipInfo.as}\n</tg-spoiler>${add_data}`;
 		} else {
-			msg = `${type}\nIP: ${ip}\n<tg-spoiler>${add_data}`;
+			msg = `${type}\nIP: ${ip}\n<tg-spoiler>${add_data}</tg-spoiler>`;
 		}
 	
-		let url = "https://api.telegram.org/bot"+ BotToken +"/sendMessage?chat_id=" + ChatID + "&parse_mode=HTML&text=" + encodeURIComponent(msg);
+		let url = "https://api.telegram.org/bot"+ BotToken +"/sendMessage?chat_id=" + ChatID + "&parse_mode=HTML&disable_notification=true&text=" + encodeURIComponent(msg);
 		return fetch(url, {
 			method: 'get',
 			headers: {
